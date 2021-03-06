@@ -1,127 +1,81 @@
 import './styles.css';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
+import refs from './refs.js'
+import * as auth from './firebase-auth.js'
+import * as get from './api.js'
+import * as dataToFirebase from './dataToFirebase.js'
+import * as dataFromFirebase from './dataFromFirebase.js'
+import * as myLibrary from './myLibrary.js'
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB_XQuuXpnCVMzsoH_tRJd_Re2w7D-8sJE",
-  authDomain: "test-ec373.firebaseapp.com",
-  databaseURL: "https://test-ec373-default-rtdb.firebaseio.com",
-  projectId: "test-ec373",
-  storageBucket: "test-ec373.appspot.com",
-  messagingSenderId: "655424318049",
-  appId: "1:655424318049:web:e8ade1934133d874e6d820",
-  measurementId: "G-RN92T8LBYY"
-};
+auth.initApp();
+get.fetchSearchedMovie();
 
-const signIn = document.querySelector('#sign_in');
-const signOut = document.querySelector('#sign_out');
-const userInfo = document.querySelector('.user-info');
+refs.gallery.addEventListener('click', (event) => {
+    if (event.target.nodeName !== 'IMG') {
+    return
+    }
+    refs.lightBox.classList.add('is-open')
+    let movieId = event.target.dataset.movieId;
+    localStorage.setItem('firebase-id', movieId)
+    const button = refs.lightBox.querySelector('#add-watched')
+    console.log(button);
+    dataFromFirebase.setModalBtnStyles(button)
+});
+
+refs.gallery.addEventListener("click", (event) => {
+    if (event.target.classList.contains("del-movie-btn")) {
+        let movieId = event.target.id;
+        localStorage.setItem('firebase-id', movieId)
+        console.log("Hello")
+        dataFromFirebase.removeFromWatch();
+
+    }
+});
+
+refs.lightBox.addEventListener('click', (event) => {
+    if (event.target.className === 'lightbox__overlay') {
+        refs.lightBox.classList.remove('is-open');
+    };
+
+    if (event.target.id === 'add-watched') {
+        dataToFirebase.addToWatch();
+    }
+
+    // if (event.target.id === 'remove-watched') {
+    //     dataFromFirebase.removeFromWatch();
+    //     dataFromFirebase.renderWatched();
+    // }
+})
 
 
-firebase.initializeApp(firebaseConfig);
 
-signIn.addEventListener('click', googleSignIn);
-signOut.addEventListener('click', googleSignOut);
+refs.library.addEventListener('click', myLibrary.showMyLibrary);
 
-function initApp() {
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-            // SIGN IN
-            const displayName = user.displayName;
-            const photoURL = user.photoURL;
-            const email = user.email;
-            const uid = user.uid;
-            userInfo.innerHTML = `<img class="user-img" src="${photoURL}">
-           <p>${displayName}</p>`;
-            console.log(`Current user: ${displayName}`, `userId: ${uid}`);
-            readUserData(uid)
-        } else {
-            // SIGN OUT
-            userInfo.innerHTML = '';
-        }
-    
-    })
-};
 
-function googleSignIn() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider)
-        .then((result) => {
-            const credential = result.credential;
-            // This gives you a Google Access Token. You can use it to access the Google API. 
-            const token = credential.accessToken;
-            // The signed-in user info.
-            const user = result.user;
-            const userId = user.uid;
-            const name = user.displayName;
-            const email = user.email;
-            const imageUrl = user.photoURL;
+refs.home.addEventListener('click', () => {
+    refs.watched.classList.add('hide');
+    refs.queue.classList.add('hide');
+    get.fetchSearchedMovie()
+});
 
-            console.log(user);
-            console.log("Success!");
-            
-            // Перевірка чи є вже юзер в БД, якшо неа то добавляє
-            checkUserID().then((data) => {
-                if (data.exists()) {
-                    console.log('User exist in database');
-                    // Завантажує данні з БД
-                    readUserData(userId);
-                } else {
-                    console.log('User NOT exist in database');
-                    writeUserData(userId, name, email, imageUrl);
-                }
-            });
+refs.watched.addEventListener('click', myLibrary.renderWatched);
+refs.queue.addEventListener('click', myLibrary.renderQueue);
 
-        }).catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            const credential = error.credential;
-            console.log(errorMessage);
-            console.log("Failed!");
-        });
-};
 
-function googleSignOut() {
-    firebase.auth().signOut().then(() => {
-        console.log('Sign-out successful.');
-        window.location.href = 'index.html';
-        userInfo.innerHTML = '';
 
-    }).catch((error) => {
-        console.log('ERRROR!');
-    });
-};
 
-// ОТРИМУЄ ДАННІ ЮЗЕРА ПО АЙДІ З БД
-function checkUserID() {
-    const userId = firebase.auth().currentUser.uid;
-    return firebase.database().ref('/users/' + userId).once('value');
-};
 
-// ЗАПИСУЄ ОСНОВНУ ІНФУ ПО ЮЗЕР В БД, ТІЛЬКИ ПРИ РЕЄСТРАЦІЇ ПЕРШОМУ ВХОДІ
 
-function writeUserData(userId, name, email, imageUrl) {
-    firebase.database().ref('users/' + userId).set({
-        username: name,
-        email: email,
-        profile_picture : imageUrl
-    }, (error) => {
-        if (error) {
-            console.log('FAILED!!!');
-        } else {
-            console.log('SUCCESS');
-        };
-            
-    });
-};
 
-function readUserData(userId) {
-    return firebase.database().ref('/users/' + userId).once('value');
-}
 
-initApp();
+
+// function switcher() {
+    // const elements = document.querySelectorAll('.watch-js')
+    // for (let el of elements) {
+    //     if (el.classList.contains('hide')) {
+    //         el.classList.remove('hide');
+    //     } else {
+    //         el.classList.add('hide');
+    //     }
+    // }
+// }
+

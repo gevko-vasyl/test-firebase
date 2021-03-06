@@ -5,65 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Webpack Starter Kit</title>
-
-    <!-- Don't forget to delete this style tag. -->
-    <style>
-      body {
-        min-height: 100vh;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .intro {
-        text-align: center;
-      }
-
-      .intro h1 {
-        margin-top: 0;
-        font-weight: 500;
-        font-size: 40px;
-      }
-
-      .intro img {
-        display: block;
-        max-width: 100%;
-        height: auto;
-      }
-    </style>
   </head>
 
   <body>
+
+
 <div class="auth-container">
+  <button id="home">HOME</button>
+  <button id="library">MY LIBRARY</button>
   <button id="sign_in">sign in</button>
   <button id="sign_out" class="hidden">sign out</button>
   <div class="user-info"></div>
 </div>
 
-<div class="checklist">
-  <p>Choose your film</p>
-
-<div>
-<p>Spiderman</p>
-<button>add to watch</button>
-<button>remove from watch</button>
+<div class="watched-container">
+  <button id="watched" class="hide">WATCHED</button>
+  <button id="queue" class="hide">QUEUE</button>
 </div>
 
-<div>
-  <input type="checkbox" id="horns" name="horns">
-  <label for="horns">Inception</label>
-</div>
-<div>
-  <input type="checkbox" id="horns" name="horns">
-  <label for="horns">Lord of the rings</label>
-</div>
-<div>
-  <input type="checkbox" id="horns" name="horns">
-  <label for="horns">Hobbit</label>
-</div>
-</div>
+<ul class="gallery"></ul>
 
+<div class="lightbox js-lightbox">
+      <div class="lightbox__overlay"></div>
 
+      <div class="lightbox__content">
+      <button id="add-watched" class="watch-js">ADD TO WATCHED</button>
+      <button id="remove-watched" class="hide watch-js">REMOVE FROM WATCHED</button>
+      <button id="add-queue" class="hide">ADD TO QUEUE</button>
+      <button id="remove-queue" class="hide">REMOVE FROM QUEUE</button>
+      </div>
+
+    </div>
   </body>
 </html>
