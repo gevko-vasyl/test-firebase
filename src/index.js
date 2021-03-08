@@ -35,7 +35,7 @@ function galleryListener(event) {
     dataFromFirebase.setModalBtnWatchStyles(addBtnWatch,removeBtnWatch);
     dataFromFirebase.setModalBtnQueueStyles(addBtnQueue, removeBtnQueue);
 
-    refs.gallery.removeEventListener('click', galleryListener);
+    // refs.gallery.removeEventListener('click', galleryListener);
     // removeListener(); 
     // if (event.target.className === 'lightbox__overlay') {
     //     removeListener(); 
