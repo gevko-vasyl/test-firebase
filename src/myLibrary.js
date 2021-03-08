@@ -16,9 +16,12 @@ function showMyLibrary() {
 
 // РЕНДЕР ПЕРЕГЛЯНУТИХ ПО АЙДІШНИКАХ З БД
 function renderWatched() {
+    refs.gallery.innerHTML = '';
     if (firebase.auth().currentUser) {
         dataFromFirebase.getMoviesWatched(firebase.auth().currentUser.uid);
     }
+    const movieCard = document.querySelector('.movie-card')
+    console.log(movieCard);
     refs.watched.setAttribute('disabled', 'true');
     refs.queue.removeAttribute('disabled');
 };
@@ -26,6 +29,9 @@ function renderWatched() {
 // РЕНДЕР ТИХ ШО В ЧЕРЗІ ПО АЙДІШНИКАХ З БД
 function renderQueue() {
     refs.gallery.innerHTML = '';
+    if (firebase.auth().currentUser) {
+        dataFromFirebase.getMoviesQueue(firebase.auth().currentUser.uid);
+    }
     refs.watched.removeAttribute('disabled');
     refs.queue.setAttribute('disabled', 'true');
 };

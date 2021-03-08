@@ -14,12 +14,12 @@
   <button id="home">HOME</button>
   <button id="library">MY LIBRARY</button>
   <button id="sign_in">sign in</button>
-  <button id="sign_out" class="hidden">sign out</button>
+  <button id="sign_out" class="">sign out</button>
   <div class="user-info"></div>
 </div>
 
 <div class="watched-container">
-  <button id="watched" class="hide">WATCHED</button>
+  <button id="watched" class="hide active-watch">WATCHED</button>
   <button id="queue" class="hide">QUEUE</button>
 </div>
 
@@ -29,10 +29,13 @@
       <div class="lightbox__overlay"></div>
 
       <div class="lightbox__content">
-      <button id="add-watched" class="watch-js">ADD TO WATCHED</button>
-      <button id="remove-watched" class="hide watch-js">REMOVE FROM WATCHED</button>
-      <button id="add-queue" class="hide">ADD TO QUEUE</button>
-      <button id="remove-queue" class="hide">REMOVE FROM QUEUE</button>
+        <ul>
+          <li><button id="add-watched">ADD TO WATCHED</button></li>
+          <li><button id="remove-watched" class="hide">REMOVE FROM WATCHED</button></li>
+          <li><button id="add-queue">ADD TO QUEUE</button></li>
+          <li><button id="remove-queue" class="hide">REMOVE FROM QUEUE</button></li>
+        </ul>
+
       </div>
 
     </div>
